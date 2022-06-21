@@ -16,6 +16,21 @@ function generateRandomNumber(min = 0, max = 10, options = { round: false, place
   return randomNum;
 }
 
+function capitalize(str) {
+  if (str.length === 0 || typeof str !== 'string') return str;
+
+  return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();
+
+}
+
+function formatWord(str) {
+  if (typeof str !== 'string') return str;
+
+  return str.split('-')
+    .map(word => capitalize(word))
+    .join(' ');
+}
+
 function getPokemonAttributes(data) {
   // 4 random moves if more than 4
   const { height, name, weight } = data;
@@ -66,21 +81,6 @@ function getPokemonAttributes(data) {
   return {
     height, name, weight, hp, atk, def, spatk, spdef, spd, type1, type2, image, ability, moves
   };
-}
-
-function capitalize(str) {
-  if (str.length === 0 || typeof str !== 'string') return str;
-
-  return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();
-
-}
-
-function formatWord(str) {
-  if (typeof str !== 'string') return str;
-
-  return str.split('-')
-    .map(word => capitalize(word))
-    .join(' ');
 }
 
 function generatePokemonHTML(attributes) {
