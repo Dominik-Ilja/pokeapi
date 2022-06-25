@@ -11,26 +11,53 @@
   }
 }
 
+$-border-width: 20px;
+
 .pokemon {
-  min-width: 320px;
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  border-radius: 1rem;
-  background-color: var.$color-gray-0;
+  position: relative;
+  perspective: 1500px;
 
   @media only screen and (min-width: var.$bp-sm) {
     min-width: auto;
   }
 
   /* ----------------------------------------
+    *POKEMON CARD ROTATION STYLINGS*
+  ---------------------------------------- */
+
+  &__side {
+    min-width: 320px;
+    padding: 0.5rem 0;
+    border-radius: 1rem;
+    border: $-border-width solid var.$color-gray-0;
+    backface-visibility: hidden;
+    transition: all 1s;
+
+    &--front {
+      transform: rotateY(0);
+    }
+    &--back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: rotateY(180deg);
+    }
+  }
+
+  &:hover .pokemon__side--front {
+    transform: rotateY(-180deg);
+  }
+
+  &:hover .pokemon__side--back {
+    transform: rotateY(0);
+  }
+
+  /* ----------------------------------------
     *POKEMON CARD INNER STYLINGS*
   ---------------------------------------- */
 
-  &__inner {
-    padding: 0.5rem 0;
-    background-color: var.$color-white;
-  }
   &__title {
     display: flex;
     justify-content: space-between;
@@ -52,6 +79,7 @@
     font-size: 1.5rem;
   }
   &__type {
+    font-size: 0.85rem;
   }
   &__image {
     margin-bottom: 0.5rem;
@@ -153,243 +181,192 @@
 
   $-gradient-degrees: 146deg;
 
-  &__bug {
+  &__bug .pokemon__side {
+    border: $-border-width solid var.$color-bug;
     background-color: var.$color-bug;
-
-    .pokemon__inner {
-      background-color: var.$color-bug;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(202, 224, 14, 1) 0%,
-        rgba(168, 184, 32, 1) 63%,
-        rgba(132, 145, 21, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(202, 224, 14, 1) 0%,
+      rgba(168, 184, 32, 1) 63%,
+      rgba(132, 145, 21, 1) 100%
+    );
   }
 
-  &__dark {
+  &__dark .pokemon__side {
+    border: $-border-width solid var.$color-dark;
+    color: var.$color-white;
     background-color: var.$color-dark;
-    .pokemon__inner {
-      color: var.$color-white;
-      background-color: var.$color-dark;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(64, 51, 43, 1) 0%,
-        rgba(84, 67, 59, 1) 63%,
-        rgba(59, 43, 32, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(64, 51, 43, 1) 0%,
+      rgba(84, 67, 59, 1) 63%,
+      rgba(59, 43, 32, 1) 100%
+    );
   }
 
-  &__dragon {
+  &__dragon .pokemon__side {
+    border: $-border-width solid var.$color-dragon;
     background-color: var.$color-dragon;
-
-    .pokemon__inner {
-      background-color: var.$color-dragon;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(59, 21, 148, 1) 0%,
-        rgba(120, 85, 200, 1) 63%,
-        rgba(74, 32, 173, 1) 100%
-      );
-      color: var.$color-white;
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(59, 21, 148, 1) 0%,
+      rgba(120, 85, 200, 1) 63%,
+      rgba(74, 32, 173, 1) 100%
+    );
+    color: var.$color-white;
   }
 
-  &__electric {
+  &__electric .pokemon__side {
+    border: $-border-width solid var.$color-electric;
     background-color: var.$color-electric;
-
-    .pokemon__inner {
-      background-color: var.$color-electric;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(252, 237, 18, 1) 0%,
-        rgba(255, 228, 121, 1) 50%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(252, 237, 18, 1) 0%,
+      rgba(255, 228, 121, 1) 50%
+    );
   }
 
-  &__fairy {
+  &__fairy .pokemon__side {
+    border: $-border-width solid var.$color-fairy;
     background-color: var.$color-fairy;
-
-    .pokemon__inner {
-      background-color: var.$color-fairy;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(222, 167, 172, 1) 0%,
-        rgba(250, 209, 212, 0.6) 63%,
-        rgba(222, 167, 172, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(222, 167, 172, 1) 0%,
+      rgba(250, 209, 212, 0.6) 63%,
+      rgba(222, 167, 172, 1) 100%
+    );
   }
 
-  &__fighting {
+  &__fighting .pokemon__side {
+    border: $-border-width solid var.$color-fighting;
     background-color: var.$color-fighting;
-
-    .pokemon__inner {
-      background-color: var.$color-fighting;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(249, 114, 107, 1) 0%,
-        rgba(192, 48, 40, 0.1) 63%,
-        rgba(249, 114, 107, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(249, 114, 107, 1) 0%,
+      rgba(192, 48, 40, 0.1) 63%,
+      rgba(249, 114, 107, 1) 100%
+    );
   }
 
-  &__fire {
+  &__fire .pokemon__side {
+    border: $-border-width solid var.$color-fire;
     background-color: var.$color-fire;
-
-    .pokemon__inner {
-      background-color: var.$color-fire;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(255, 84, 84, 1) 0%,
-        rgba(204, 181, 44, 1) 63%,
-        rgba(252, 147, 18, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(255, 84, 84, 1) 0%,
+      rgba(204, 181, 44, 1) 63%,
+      rgba(252, 147, 18, 1) 100%
+    );
   }
 
-  &__flying {
+  &__flying .pokemon__side {
+    border: $-border-width solid var.$color-flying;
     background-color: var.$color-flying;
-
-    .pokemon__inner {
-      background-color: var.$color-flying;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(234, 227, 255, 1) 0%,
-        rgba(168, 144, 240, 1) 63%,
-        rgba(134, 110, 207, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(234, 227, 255, 1) 0%,
+      rgba(168, 144, 240, 1) 63%,
+      rgba(134, 110, 207, 1) 100%
+    );
   }
 
-  &__ghost {
+  &__ghost .pokemon__side {
+    border: $-border-width solid var.$color-ghost;
+    color: var.$color-white;
     background-color: var.$color-ghost;
-
-    .pokemon__inner {
-      color: var.$color-white;
-      background-color: var.$color-ghost;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(95, 78, 167, 1) 0%,
-        rgba(113, 107, 138, 1) 63%,
-        rgba(95, 78, 167, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(95, 78, 167, 1) 0%,
+      rgba(113, 107, 138, 1) 63%,
+      rgba(95, 78, 167, 1) 100%
+    );
   }
 
-  &__grass {
+  &__grass .pokemon__side {
+    border: $-border-width solid var.$color-grass;
     background-color: var.$color-grass;
-
-    .pokemon__inner {
-      background-color: var.$color-grass;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(76, 147, 52, 1) 0%,
-        rgba(155, 213, 134, 1) 63%,
-        rgba(38, 111, 13, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(76, 147, 52, 1) 0%,
+      rgba(155, 213, 134, 1) 63%,
+      rgba(38, 111, 13, 1) 100%
+    );
   }
 
-  &__ground {
+  &__ground .pokemon__side {
+    border: $-border-width solid var.$color-ground;
     background-color: var.$color-ground;
-
-    .pokemon__inner {
-      background-color: var.$color-ground;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(227, 174, 28, 1) 0%,
-        rgba(228, 201, 129, 1) 63%,
-        rgba(199, 156, 38, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(227, 174, 28, 1) 0%,
+      rgba(228, 201, 129, 1) 63%,
+      rgba(199, 156, 38, 1) 100%
+    );
   }
 
-  &__ice {
+  &__ice .pokemon__side {
+    border: $-border-width solid var.$color-ice;
     background-color: var.$color-ice;
-
-    .pokemon__inner {
-      background-color: var.$color-ice;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(120, 255, 255, 1) 0%,
-        rgba(235, 255, 255, 1) 63%,
-        rgba(33, 145, 145, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(120, 255, 255, 1) 0%,
+      rgba(235, 255, 255, 1) 63%,
+      rgba(33, 145, 145, 1) 100%
+    );
   }
 
-  &__poison {
+  &__poison .pokemon__side {
+    border: $-border-width solid var.$color-poison;
     background-color: var.$color-poison;
-
-    .pokemon__inner {
-      background-color: var.$color-poison;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(63, 81, 194, 1) 0%,
-        rgba(197, 173, 255, 1) 63%,
-        rgba(80, 41, 172, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(63, 81, 194, 1) 0%,
+      rgba(197, 173, 255, 1) 63%,
+      rgba(80, 41, 172, 1) 100%
+    );
   }
 
-  &__psychic {
+  &__psychic .pokemon__side {
+    border: $-border-width solid var.$color-psychic;
     background-color: var.$color-psychic;
-
-    .pokemon__inner {
-      background-color: var.$color-psychic;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(255, 188, 219, 1) 0%,
-        rgba(248, 88, 180, 1) 63%,
-        rgba(255, 160, 211, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(255, 188, 219, 1) 0%,
+      rgba(248, 88, 180, 1) 63%,
+      rgba(255, 160, 211, 1) 100%
+    );
   }
 
-  &__rock {
+  &__rock .pokemon__side {
+    border: $-border-width solid var.$color-rock;
     background-color: var.$color-rock;
-
-    .pokemon__inner {
-      background-color: var.$color-rock;
-
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(157, 136, 45, 1) 0%,
-        rgba(228, 201, 129, 1) 63%,
-        rgba(124, 102, 7, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(157, 136, 45, 1) 0%,
+      rgba(228, 201, 129, 1) 63%,
+      rgba(124, 102, 7, 1) 100%
+    );
   }
 
-  &__steel {
+  &__steel .pokemon__side {
+    border: $-border-width solid var.$color-steel;
     background-color: var.$color-steel;
-
-    .pokemon__inner {
-      background-color: var.$color-steel;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(119, 164, 188, 1) 0%,
-        rgba(193, 204, 210, 1) 63%,
-        rgba(80, 119, 140, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(119, 164, 188, 1) 0%,
+      rgba(193, 204, 210, 1) 63%,
+      rgba(80, 119, 140, 1) 100%
+    );
   }
 
-  &__water {
+  &__water .pokemon__side {
+    border: $-border-width solid var.$color-water;
     background-color: var.$color-water;
-
-    .pokemon__inner {
-      background-color: var.$color-water;
-      background-image: linear-gradient(
-        $-gradient-degrees,
-        rgba(17, 137, 152, 1) 0%,
-        rgba(102, 193, 204, 1) 63%,
-        rgba(32, 68, 173, 1) 100%
-      );
-    }
+    background-image: linear-gradient(
+      $-gradient-degrees,
+      rgba(17, 137, 152, 1) 0%,
+      rgba(102, 193, 204, 1) 63%,
+      rgba(32, 68, 173, 1) 100%
+    );
   }
 }

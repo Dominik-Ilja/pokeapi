@@ -93,7 +93,7 @@ function generatePokemonHTML(attributes) {
 
   const html = `
       <article class="pokemon pokemon__${type1}">
-      <div class="pokemon__inner">
+      <div class="pokemon__side pokemon__side--front">
         <header class="pokemon__title">
           <!-- name -->
           <h1 class="pokemon__name">${formatWord(name)}</h1>
@@ -147,6 +147,9 @@ function generatePokemonHTML(attributes) {
             Height - ${height}
           </div>
         </div>
+      </div>
+      <div class="pokemon__side pokemon__side--back">
+      back
       </div>
     </article>
   `;
