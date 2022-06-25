@@ -1,0 +1,26 @@
+.searchbar {
+  display: flex;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.searchbar input {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.5rem 0 0.5rem 1rem;
+  font-size: 1.25rem;
+  border: 2px solid rgb(214, 214, 214);
+}
+
+.searchbar button {
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}

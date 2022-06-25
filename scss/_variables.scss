@@ -1,0 +1,47 @@
+/* ----------------------------------------
+  *BREAKPOINT VARIABLES*
+---------------------------------------- */
+$bp-sm: 380px;
+
+/* ----------------------------------------
+  *COLOR VARIABLES*
+---------------------------------------- */
+
+$color-white: #fff;
+$color-gray-0: #f5f5f5;
+$color-black: #232323;
+// $color-black: #000;
+
+// Colors for Pokemon Types
+$color-bug: #a8b820;
+$color-dark: #705848;
+$color-dragon: #4a20ad;
+$color-electric: #efd229;
+$color-fairy: #fad1d4;
+$color-fighting: #c03028;
+$color-fire: #f52323;
+$color-flying: #a890f0;
+$color-ghost: #7d79a3;
+$color-grass: #4c8837;
+$color-ground: #e0c068;
+$color-ice: #b8fafd;
+$color-poison: #a27dfa;
+$color-psychic: #f85888;
+$color-rock: #b8a038;
+$color-steel: #77a4bc;
+$color-water: #4f72db;
+
+// Colors for Pokemon Stats
+$color-hp: #ff3030;
+$color-atk: #ff9900;
+$color-def: #f8d030;
+$color-spatk: #6890f0;
+$color-spdef: #78c850;
+$color-spd: #f85888;
+
+/* ----------------------------------------
+  *FONT VARIABLES*
+---------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+$font-poppins: "Poppins", sans-serif;
