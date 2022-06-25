@@ -163,15 +163,63 @@ function renderCard(data, root) {
   root.innerHTML += html;
 }
 
+function searchResponse(chain, arr) {
+  for (const key in chain) {
+
+    if (key === 'evolves_to') {
+
+      if (chain[key].length > 0) {
+        searchResponse(chain[key][0], arr);
+      }
+
+      // console.log([chain.species.name, chain.species.url]);
+      arr.unshift([chain.species.name, chain.species.url]);
+    }
+  }
+}
+
 search.addEventListener('click', async () => {
+
+
   try {
+
     const query = input.value.toLowerCase();
     const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${query}`);
-    console.log(data);
+    const evolutionSprites = await axios.get(data.species.url)
+      .then(async ({ data }) => await axios.get(data.evolution_chain.url))
+      .then(({ data }) => {
+        const evoLine = [];
+        searchResponse(data.chain, evoLine);
+        return evoLine;
+      })
+      .then(async (evoLine) => {
+        // console.log(evoLine);
+        const requests = evoLine.map(request => axios.get(request[1]));
+        const responses = await Promise.all(requests);
+        // console.log(responses);
+        return responses.map(({ data }) => data);
+      })
+      .then(async (arrOfData) => {
+        // console.log(arrOfData);
+        const requests = arrOfData.map(request => axios.get(`https://pokeapi.co/api/v2/pokemon/${request.name}`));
+        const responses = await Promise.all(requests);
+        // console.log(responses);
+        return responses.map(({ data }) => data);
+      })
+      .then(async (arrOfData) => {
+        console.log(arrOfData);
+        const sprites = arrOfData.map((data) => data.sprites.other["official-artwork"].front_default);
+        return sprites;
+      });
+
+    console.log("search: ", search);
+    console.log("evolutionSprites: ", evolutionSprites);
+
+    // console.log(data);
     renderCard(data, cards);
 
   } catch (error) {
-    console.log(error.response);
+    console.log(error);
   }
 });
 
@@ -179,8 +227,18 @@ random.addEventListener('click', async () => {
   try {
     // 913 - 1
     const randomId = generateRandomNumber(0, 912, { round: true, place: 0 });
-    const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-    renderCard(data, cards);
+    const responseForPokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+    const responseForEvolution = await axios.get(responseForPokemon.data.species.url);
+    const responseForChain = await axios.get(responseForEvolution.data.evolution_chain.url);
+    console.log(responseForChain.data);
+
+    // console.log(data);
+    // const evoUrl = data.species.url;
+    // console.log(evoUrl);
+    // const request2 = await axios.get(evoUrl);
+    // console.log(request2);
+    // // console.log(request2.data.evolution_chain.url);
+    renderCard(responseForPokemon.data, cards);
   } catch (error) {
     console.log(error);
   }
