@@ -41,6 +41,30 @@ img {
   padding-right: 1rem;
 }
 
+.error {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid #f52323;
+  color: #f52323;
+  font-weight: 600;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+  padding: 3rem 0.5rem;
+  z-index: 1100;
+  background-color: #fff;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  transition: all 1s;
+}
+
+.visible-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .searchbar {
   display: flex;
   margin-top: 3rem;
@@ -101,6 +125,7 @@ img {
 }
 .pokemon__side {
   min-width: 320px;
+  min-height: 500px;
   padding: 0.5rem 0;
   border-radius: 1rem;
   border: 20px solid #f5f5f5;
@@ -117,6 +142,10 @@ img {
   right: 0;
   bottom: 0;
   transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 }
 .pokemon:hover .pokemon__side--front {
   transform: rotateY(-180deg);
@@ -234,6 +263,12 @@ img {
   justify-content: space-evenly;
   font-weight: 600;
   font-size: 0.8rem;
+}
+.pokemon__evo {
+  max-width: 150px;
+}
+.pokemon__evo-arrow {
+  font-size: 2rem;
 }
 .pokemon__bug .pokemon__side {
   border: 20px solid #a8b820;

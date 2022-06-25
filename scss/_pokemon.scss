@@ -27,6 +27,7 @@ $-border-width: 20px;
 
   &__side {
     min-width: 320px;
+    min-height: 500px;
     padding: 0.5rem 0;
     border-radius: 1rem;
     border: $-border-width solid var.$color-gray-0;
@@ -43,6 +44,10 @@ $-border-width: 20px;
       right: 0;
       bottom: 0;
       transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
     }
   }
 
@@ -168,6 +173,12 @@ $-border-width: 20px;
     justify-content: space-evenly;
     font-weight: 600;
     font-size: 0.8rem;
+  }
+  &__evo {
+    max-width: 150px;
+  }
+  &__evo-arrow {
+    font-size: 2rem;
   }
 
   /* ----------------------------------------

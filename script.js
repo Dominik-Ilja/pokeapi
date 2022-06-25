@@ -83,9 +83,18 @@ function getPokemonAttributes(data) {
   };
 }
 
-function generatePokemonHTML(attributes) {
-  const moves = attributes.moves.map(move => {
-    return `<div class="pokemon__move">${formatWord(move)}</div>`;
+function generatePokemonHTML(attributes, evoSpritesUrls = []) {
+
+  const moves = attributes.moves.map(move => `<div class="pokemon__move">${formatWord(move)}</div>`).join("");
+  const backImages = evoSpritesUrls.map((spriteUrl, index, { length }) => {
+    let html = `<img class="pokemon__evo" src="${spriteUrl}">`;
+
+    if (index !== length - 1) {
+      html += `<i class='pokemon__evo-arrow bx bx-down-arrow-alt'></i>`;
+
+    }
+
+    return html;
   }).join("");
   const { type1, type2, name, image, ability, hp, atk, def, spdef, spatk, spd, weight, height } = attributes;
   const multiType = `${formatWord(type1)} / ${formatWord(type2)}`;
@@ -149,7 +158,7 @@ function generatePokemonHTML(attributes) {
         </div>
       </div>
       <div class="pokemon__side pokemon__side--back">
-      back
+        ${backImages}
       </div>
     </article>
   `;
@@ -157,9 +166,9 @@ function generatePokemonHTML(attributes) {
   return html;
 }
 
-function renderCard(data, root) {
+function renderCard(data, root, evoSpritesUrls = []) {
   const attributes = getPokemonAttributes(data);
-  const html = generatePokemonHTML(attributes);
+  const html = generatePokemonHTML(attributes, evoSpritesUrls);
   root.innerHTML += html;
 }
 
@@ -178,6 +187,53 @@ function searchResponse(chain, arr) {
   }
 }
 
+async function getEvoSprites(data) {
+  const evolutionSprites = await axios.get(data.species.url)
+    .then(async ({ data }) => await axios.get(data.evolution_chain.url))
+    .then(({ data }) => {
+      const evoLine = [];
+      searchResponse(data.chain, evoLine);
+      return evoLine;
+    })
+    .then(async (evoLine) => {
+      const requests = evoLine.map(request => axios.get(request[1]));
+      const responses = await Promise.all(requests);
+      return responses.map(({ data }) => data);
+    })
+    .then(async (arrOfData) => {
+      const requests = arrOfData.map(request => axios.get(`https://pokeapi.co/api/v2/pokemon/${request.name}`));
+      const responses = await Promise.all(requests);
+      return responses.map(({ data }) => data);
+    })
+    .then(async (arrOfData) => {
+      console.log(arrOfData);
+      const sprites = arrOfData.map((data) => data.sprites.other["official-artwork"].front_default);
+      return sprites;
+    });
+
+  console.log(evolutionSprites);
+  return evolutionSprites;
+}
+
+function createErrorPopup() {
+  // create popup indicating the pokemon couldn't be found
+  const errPopup = document.createElement('div');
+  errPopup.textContent = "Pokemon Couldn't Be Found";
+  errPopup.classList.add('error', 'visible-hidden');
+
+  errPopup.addEventListener('elLoaded', () => {
+    errPopup.classList.remove('visible-hidden');
+  }, { once: true });
+
+  document.body.prepend(errPopup);
+  setTimeout(() => {
+    errPopup.dispatchEvent(new CustomEvent('elLoaded'));
+
+    setTimeout(() => errPopup.classList.add('visible-hidden'), 2500);
+    setTimeout(() => errPopup.remove(), 5000);
+  }, 1000);
+}
+
 search.addEventListener('click', async () => {
 
 
@@ -185,41 +241,13 @@ search.addEventListener('click', async () => {
 
     const query = input.value.toLowerCase();
     const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${query}`);
-    const evolutionSprites = await axios.get(data.species.url)
-      .then(async ({ data }) => await axios.get(data.evolution_chain.url))
-      .then(({ data }) => {
-        const evoLine = [];
-        searchResponse(data.chain, evoLine);
-        return evoLine;
-      })
-      .then(async (evoLine) => {
-        // console.log(evoLine);
-        const requests = evoLine.map(request => axios.get(request[1]));
-        const responses = await Promise.all(requests);
-        // console.log(responses);
-        return responses.map(({ data }) => data);
-      })
-      .then(async (arrOfData) => {
-        // console.log(arrOfData);
-        const requests = arrOfData.map(request => axios.get(`https://pokeapi.co/api/v2/pokemon/${request.name}`));
-        const responses = await Promise.all(requests);
-        // console.log(responses);
-        return responses.map(({ data }) => data);
-      })
-      .then(async (arrOfData) => {
-        console.log(arrOfData);
-        const sprites = arrOfData.map((data) => data.sprites.other["official-artwork"].front_default);
-        return sprites;
-      });
+    const sprites = await getEvoSprites(data);
+    renderCard(data, cards, sprites);
 
-    console.log("search: ", search);
-    console.log("evolutionSprites: ", evolutionSprites);
-
-    // console.log(data);
-    renderCard(data, cards);
-
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error);
+    createErrorPopup();
   }
 });
 
@@ -227,20 +255,13 @@ random.addEventListener('click', async () => {
   try {
     // 913 - 1
     const randomId = generateRandomNumber(0, 912, { round: true, place: 0 });
-    const responseForPokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-    const responseForEvolution = await axios.get(responseForPokemon.data.species.url);
-    const responseForChain = await axios.get(responseForEvolution.data.evolution_chain.url);
-    console.log(responseForChain.data);
-
-    // console.log(data);
-    // const evoUrl = data.species.url;
-    // console.log(evoUrl);
-    // const request2 = await axios.get(evoUrl);
-    // console.log(request2);
-    // // console.log(request2.data.evolution_chain.url);
-    renderCard(responseForPokemon.data, cards);
-  } catch (error) {
+    const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+    const sprites = await getEvoSprites(data);
+    renderCard(data, cards, sprites);
+  }
+  catch (error) {
     console.log(error);
+    createErrorPopup();
   }
 });
 
